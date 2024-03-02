@@ -4,6 +4,7 @@
 #include <string.h>
 
 #define MAX_LINE_LENGTH 1024
+
 /**
  * main - Entry point for the Monty interpreter program
  * @argc: The number of command-line arguments
@@ -13,10 +14,10 @@
  */
 int main(int argc, char *argv[])
 {
-	FILE *file;
-	char line[MAX_LINE_LENGTH];
-	char *opcode;
-	char *arg;
+    FILE *file;
+    char line[MAX_LINE_LENGTH];
+    char *opcode;
+    char *arg;
     int line_number = 0;
     stack_t *stack = NULL;
 
@@ -48,6 +49,8 @@ int main(int argc, char *argv[])
             if (arg == NULL)
             {
                 fprintf(stderr, "L%d: usage: push integer\n", line_number);
+                fclose(file);
+                free_stack(stack);
                 exit(EXIT_FAILURE);
             }
             push(&stack, atoi(arg));
@@ -57,22 +60,9 @@ int main(int argc, char *argv[])
             pall(&stack);
         }
 
-        else if (strcmp(opcode, "pint") == 0)
-        {
-            pint(&stack, line_number);
-        }
-        else if (strcmp(opcode, "pop") == 0)
-        {
-            pop(&stack, line_number);
-        }
-        else
-        {
-            fprintf(stderr, "L%d: unknown instruction %s\n", line_number, opcode);
-            exit(EXIT_FAILURE);
-        }
     }
 
     fclose(file);
-
+    free_stack(stack);
     return (0);
 }
