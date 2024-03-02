@@ -17,54 +17,62 @@ int main(int argc, char *argv[])
 	char line[MAX_LINE_LENGTH];
 	char *opcode;
 	char *arg;
-	int line_number = 0;
+    int line_number = 0;
+    stack_t *stack = NULL;
 
-	stack_t *stack = NULL;
+    if (argc != 2)
+    {
+        fprintf(stderr, "USAGE: monty file\n");
+        exit(EXIT_FAILURE);
+    }
 
-	if (argc != 2)
-	{
-		fprintf(stderr, "USAGE: monty file\n");
-		exit(EXIT_FAILURE);
-	}
+    file = fopen(argv[1], "r");
+    if (file == NULL)
+    {
+        fprintf(stderr, "Error: Can't open file %s\n", argv[1]);
+        exit(EXIT_FAILURE);
+    }
 
-	file = fopen(argv[1], "r");
-	if (file == NULL)
-	{
-		perror("Error");
-		exit(EXIT_FAILURE);
-	}
+    while (fgets(line, sizeof(line), file) != NULL)
+    {
+        line_number++;
+        line[strcspn(line, "\n")] = '\0';
 
-	while (fgets(line, sizeof(line), file) != NULL)
-	{
-		line_number++;
-		line[strcspn(line, "\n")] = '\0';
+        opcode = strtok(line, " ");
+        if (opcode == NULL)
+            continue;
 
-		opcode = strtok(line, " ");
-		if (opcode == NULL)
-			continue;
+        if (strcmp(opcode, "push") == 0)
+        {
+            arg = strtok(NULL, " ");
+            if (arg == NULL)
+            {
+                fprintf(stderr, "L%d: usage: push integer\n", line_number);
+                exit(EXIT_FAILURE);
+            }
+            push(&stack, atoi(arg));
+        }
+        else if (strcmp(opcode, "pall") == 0)
+        {
+            pall(&stack);
+        }
 
-		if (strcmp(opcode, "push") == 0)
-		{
-			arg = strtok(NULL, " ");
-			if (arg == NULL)
-			{
-				fprintf(stderr, "L%d: usage: push integer\n", line_number);
-				exit(EXIT_FAILURE);
-			}
-			push(&stack, atoi(arg));
-		}
-		else if (strcmp(opcode, "pall") == 0)
-		{
-			pall(&stack);
-		}
-		else
-		{
-			fprintf(stderr, "L%d: unknown instruction %s\n", line_number, opcode);
-			exit(EXIT_FAILURE);
-		}
-	}
+        else if (strcmp(opcode, "pint") == 0)
+        {
+            pint(&stack);
+        }
+        else if (strcmp(opcode, "pop") == 0)
+        {
+            pop(&stack);
+        }
+        else
+        {
+            fprintf(stderr, "L%d: unknown instruction %s\n", line_number, opcode);
+            exit(EXIT_FAILURE);
+        }
+    }
 
-	fclose(file);
+    fclose(file);
 
-	return (0);
+    return (0);
 }
