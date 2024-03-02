@@ -1,57 +1,61 @@
 #include "monty.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_LINE_LENGTH 1024
 
 int main(int argc, char *argv[])
 {
+    FILE *file;
+    char line[MAX_LINE_LENGTH];
+    char *opcode;
+    char *arg;
+    int line_number = 0;
+
     if (argc != 2)
     {
-        fprintf(stderr, "USAGE: monty file\n");
+        fprintf(stderr, "Usage: monty file\n");
         exit(EXIT_FAILURE);
     }
 
-    FILE *file = fopen(argv[1], "r");
-    if (!file)
+    file = fopen(argv[1], "r");
+    if (file == NULL)
     {
         fprintf(stderr, "Error: Can't open file %s\n", argv[1]);
         exit(EXIT_FAILURE);
     }
 
-    stack_t *stack = NULL;
-    char *opcode;
-    int value;
-
-    char *line = NULL;
-    size_t len = 0;
-    ssize_t read;
-
-    while ((read = getline(&line, &len, file)) != -1)
+    while (fgets(line, sizeof(line), file) != NULL)
     {
-        opcode = strtok(line, " \n");
-        if (!opcode)
+        line_number++;
+        line[strcspn(line, "\n")] = '\0';
+
+        opcode = strtok(line, " ");
+        if (opcode == NULL)
             continue;
 
         if (strcmp(opcode, "push") == 0)
         {
-            char *arg = strtok(NULL, " \n");
-            if (!arg)
+            arg = strtok(NULL, " ");
+            if (arg == NULL)
             {
                 fprintf(stderr, "L%d: usage: push integer\n", line_number);
                 exit(EXIT_FAILURE);
             }
-            value = atoi(arg);
-            push(&stack, value);
+            printf("Pushing %s\n", arg);
         }
-        else if (strcmp(opcode, "pall") == 0)
+        else if (strcmp(opcode, "pop") == 0)
         {
-            pall(&stack);
+            printf("Popping\n");
         }
-        else
+        else if (strcmp(opcode, "add") == 0)
         {
-            fprintf(stderr, "L%d: unknown instruction %s\n", line_number, opcode);
-            exit(EXIT_FAILURE);
+            printf("Adding\n");
         }
     }
 
-    free(line);
     fclose(file);
-    return (EXIT_SUCCESS);
+
+    return (0);
 }
