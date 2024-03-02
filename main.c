@@ -12,6 +12,7 @@ int main(int argc, char *argv[])
     char *opcode;
     char *arg;
     int line_number = 0;
+    stack_t *stack = NULL;
 
     if (argc != 2)
     {
@@ -43,15 +44,11 @@ int main(int argc, char *argv[])
                 fprintf(stderr, "L%d: usage: push integer\n", line_number);
                 exit(EXIT_FAILURE);
             }
-            printf("Pushing %s\n", arg);
+            push(&stack, atoi(arg));
         }
-        else if (strcmp(opcode, "pop") == 0)
+        else if (strcmp(opcode, "pall") == 0)
         {
-            printf("Popping\n");
-        }
-        else if (strcmp(opcode, "add") == 0)
-        {
-            printf("Adding\n");
+            pall(&stack);
         }
     }
 
