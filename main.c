@@ -59,11 +59,11 @@ int main(int argc, char *argv[])
 
         else if (strcmp(opcode, "pint") == 0)
         {
-            pint(&stack);
+            pint(&stack, line_number);
         }
         else if (strcmp(opcode, "pop") == 0)
         {
-            pop(&stack);
+            pop(&stack, line_number);
         }
         else
         {
