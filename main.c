@@ -23,14 +23,14 @@ int main(int argc, char *argv[])
 
 	if (argc != 2)
 	{
-		fprintf(stderr, "Usage: monty file\n");
+		fprintf(stderr, "USAGE: monty file\n");
 		exit(EXIT_FAILURE);
 	}
 
 	file = fopen(argv[1], "r");
 	if (file == NULL)
 	{
-		fprintf(stderr, "Error: Can't open file %s\n", argv[1]);
+		perror("Error");
 		exit(EXIT_FAILURE);
 	}
 
@@ -56,6 +56,11 @@ int main(int argc, char *argv[])
 		else if (strcmp(opcode, "pall") == 0)
 		{
 			pall(&stack);
+		}
+		else
+		{
+			fprintf(stderr, "L%d: unknown instruction %s\n", line_number, opcode);
+			exit(EXIT_FAILURE);
 		}
 	}
 
