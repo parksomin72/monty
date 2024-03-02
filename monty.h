@@ -2,6 +2,7 @@
 #define MONTY_H
 
 #include <stdio.h>
+#include <stdlib.h>
 
 /**
  * struct stack_s - doubly linked list representation of a stack (or queue)
@@ -14,44 +15,12 @@
  */
 typedef struct stack_s
 {
-int n;
-struct stack_s *prev;
-struct stack_s *next;
+	int n;
+	struct stack_s *prev;
+	struct stack_s *next;
 } stack_t;
 
-/**
- * struct instruction_s - opcode and its function
- * @opcode: the opcode
- * @f: function to handle the opcode
- *
- * Description: opcode and its function
- * for stack, queues, LIFO, FIFO
- */
-typedef struct instruction_s
-{
-char *opcode;
-void (*f)(stack_t **stack, unsigned int line_number);
-} instruction_t;
-
-/**
- * struct data_s - holds global data for the interpreter
- * @arg: argument for the current opcode
- *
- * Description: global data structure
- */
-typedef struct data_s
-{
-char *arg;
-} data_t;
-
-extern data_t *data;
-
-/* Function prototypes */
-void push(stack_t **stack, unsigned int line_number);
-void pall(stack_t **stack, unsigned int line_number);
-
-/* Function prototype for the interpreter function */
-void monty_interpreter(FILE *file);
-instruction_t *get_instruction(char *opcode);
+void push(stack_t **stack, int value);
+void pall(stack_t **stack);
 
 #endif /* MONTY_H */

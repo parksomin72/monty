@@ -1,30 +1,60 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include "monty.h"
 
-/**
- * main - Entry point for the Monty interpreter.
- * @argc: Number of command-line arguments.
- * @argv: Array of command-line argument strings.
- *
- * Return: EXIT_SUCCESS if successful, EXIT_FAILURE otherwise.
- */
 int main(int argc, char *argv[])
 {
-FILE *file;
-if (argc != 2)
-{
-fprintf(stderr, "USAGE: monty file\n");
-return (EXIT_FAILURE);
-}
-file = fopen(argv[1], "r");
-if (!file)
-{
-fprintf(stderr, "Error: Can't open file %s\n", argv[1]);
-return (EXIT_FAILURE);
-}
-/* Call your interpreter function with the opened file */
-monty_interpreter(file);
-fclose(file);
-return (EXIT_SUCCESS);
+    if (argc != 2)
+    {
+        fprintf(stderr, "USAGE: monty file\n");
+        exit(EXIT_FAILURE);
+    }
+
+    FILE *file = fopen(argv[1], "r");
+    if (!file)
+    {
+        fprintf(stderr, "Error: Can't open file %s\n", argv[1]);
+        exit(EXIT_FAILURE);
+    }
+
+    stack_t *stack = NULL;
+    char *opcode;
+    int value;
+
+    // Read each line of the file
+    char *line = NULL;
+    size_t len = 0;
+    ssize_t read;
+
+    while ((read = getline(&line, &len, file)) != -1)
+    {
+        // Tokenize the line
+        opcode = strtok(line, " \n");
+        if (!opcode)
+            continue;
+
+        if (strcmp(opcode, "push") == 0)
+        {
+            // Extract integer argument for push
+            char *arg = strtok(NULL, " \n");
+            if (!arg)
+            {
+                fprintf(stderr, "L%d: usage: push integer\n", line_number);
+                exit(EXIT_FAILURE);
+            }
+            value = atoi(arg);
+            push(&stack, value);
+        }
+        else if (strcmp(opcode, "pall") == 0)
+        {
+            pall(&stack);
+        }
+        else
+        {
+            fprintf(stderr, "L%d: unknown instruction %s\n", line_number, opcode);
+            exit(EXIT_FAILURE);
+        }
+    }
+
+    free(line);
+    fclose(file);
+    return EXIT_SUCCESS;
 }
