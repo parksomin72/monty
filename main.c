@@ -19,21 +19,18 @@ int main(int argc, char *argv[])
     char *opcode;
     int value;
 
-    // Read each line of the file
     char *line = NULL;
     size_t len = 0;
     ssize_t read;
 
     while ((read = getline(&line, &len, file)) != -1)
     {
-        // Tokenize the line
         opcode = strtok(line, " \n");
         if (!opcode)
             continue;
 
         if (strcmp(opcode, "push") == 0)
         {
-            // Extract integer argument for push
             char *arg = strtok(NULL, " \n");
             if (!arg)
             {
@@ -56,5 +53,5 @@ int main(int argc, char *argv[])
 
     free(line);
     fclose(file);
-    return EXIT_SUCCESS;
+    return (EXIT_SUCCESS);
 }
