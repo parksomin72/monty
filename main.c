@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 #define MAX_LINE_LENGTH 1024
 
@@ -46,7 +47,7 @@ int main(int argc, char *argv[])
         if (strcmp(opcode, "push") == 0)
         {
             arg = strtok(NULL, " ");
-            if (arg == NULL)
+            if (arg == NULL || !is_numeric(arg))
             {
                 fprintf(stderr, "L%d: usage: push integer\n", line_number);
                 fclose(file);
@@ -59,10 +60,37 @@ int main(int argc, char *argv[])
         {
             pall(&stack);
         }
-
+        else
+        {
+            fprintf(stderr, "L%d: unknown instruction %s\n", line_number, opcode);
+            fclose(file);
+            free_stack(stack);
+            exit(EXIT_FAILURE);
+        }
     }
 
     fclose(file);
     free_stack(stack);
     return (0);
+}
+
+/**
+ * is_numeric - Checks if a string is a valid numeric value
+ * @str: The string to check
+ *
+ * Return: 1 if the string is numeric, 0 otherwise
+ */
+int is_numeric(const char *str)
+{
+    if (str == NULL || *str == '\0')
+        return 0;
+
+    while (*str != '\0')
+    {
+        if (!isdigit(*str))
+            return 0;
+        str++;
+    }
+
+    return (1);
 }
