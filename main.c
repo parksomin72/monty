@@ -41,6 +41,10 @@ void process_line(char *line, int line_number, stack_t **stack)
     {
         pall(stack);
     }
+    else if (strcmp(opcode, "pop") == 0)
+    {
+	    pop(stack, line_number);
+    }
     else
     {
         fprintf(stderr, "L%d: unknown instruction %s\n", line_number, opcode);
