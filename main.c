@@ -57,15 +57,70 @@ void process_line(char *line, int line_number, stack_t **stack)
  */
 int main(int argc, char *argv[])
 {
-	if (argc != 2)
-	{
-		fprintf(stderr, "USAGE: monty file\n");
-		exit(EXIT_FAILURE);
-	}
+    FILE *file;
+    char line[MAX_LINE_LENGTH];
+    int line_number = 0;
+    stack_t *stack = NULL;
+    char *opcode;
+    char *arg;
 
-	process_file(argv[1]);
+    if (argc != 2)
+    {
+        fprintf(stderr, "USAGE: monty file\n");
+        exit(EXIT_FAILURE);
+    }
 
-	return (0);
+    file = fopen(argv[1], "r");
+    if (file == NULL)
+    {
+        fprintf(stderr, "Error: Can't open file %s\n", argv[1]);
+        exit(EXIT_FAILURE);
+    }
+
+    while (fgets(line, sizeof(line), file) != NULL)
+    {
+        line_number++;
+        line[strcspn(line, "\n")] = '\0';
+
+        opcode = strtok(line, " \n");
+        if (opcode == NULL)
+        {
+            continue;
+        }
+
+        if (strcmp(opcode, "push") == 0)
+        {
+            arg = strtok(NULL, " \n");
+            if (arg == NULL || !is_numeric(arg))
+            {
+                fprintf(stderr, "L%d: usage: push integer\n", line_number);
+                exit(EXIT_FAILURE);
+            }
+            push(&stack, atoi(arg));
+        }
+        else if (strcmp(opcode, "pint") == 0)
+        {
+            pint(&stack, line_number);
+        }
+        else if (strcmp(opcode, "pall") == 0)
+        {
+            pall(&stack);
+        }
+        else if (strcmp(opcode, "swap") == 0)
+        {
+            swap(&stack, line_number);
+        }
+        else
+        {
+            fprintf(stderr, "L%d: unknown instruction %s\n", line_number, opcode);
+            exit(EXIT_FAILURE);
+        }
+    }
+
+    fclose(file);
+    free_stack(stack);
+
+    return (0);
 }
 /**
  * process_file - Processes the lines of a file.

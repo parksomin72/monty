@@ -25,6 +25,7 @@ void push(stack_t **stack, int value);
 void pall(stack_t **stack);
 void pint(stack_t **stack, int line_number);
 void pop(stack_t **stack, int line_number);
+void swap(stack_t **stack, int line_number);
 void free_stack(stack_t *stack);
 int is_numeric(const char *str);
 void process_file(const char *filename);
