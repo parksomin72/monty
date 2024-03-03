@@ -43,7 +43,7 @@ void process_line(char *line, int line_number, stack_t **stack)
     }
     else if (strcmp(opcode, "pop") == 0)
     {
-	    pop(stack, line_number);
+        pop(stack, line_number);
     }
     else
     {
@@ -51,7 +51,6 @@ void process_line(char *line, int line_number, stack_t **stack)
         exit(EXIT_FAILURE);
     }
 }
-
 /**
  * main - Entry point for the Monty interpreter program
  * @argc: The number of command-line arguments
