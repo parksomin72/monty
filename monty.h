@@ -16,6 +16,7 @@
 typedef struct stack_s
 {
 	int n;
+
 	struct stack_s *prev;
 	struct stack_s *next;
 } stack_t;
@@ -26,5 +27,8 @@ void pint(stack_t **stack, int line_number);
 void pop(stack_t **stack, int line_number);
 void free_stack(stack_t *stack);
 int is_numeric(const char *str);
+void process_file(const char *filename);
+void process_line(char *line, int line_number, stack_t **stack);
+char *my_strdup(const char *s);
 
 #endif /* MONTY_H */
