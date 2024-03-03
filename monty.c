@@ -1,132 +1,130 @@
 #include "monty.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+
+#define MAX_LINE_LENGTH 1024
 /**
- * push - Pushes an element onto the stack.
- * @stack: Double pointer to the stack
- * @value: Value to be pushed onto the stack
- */
-void push(stack_t **stack, int value)
-{
-	stack_t *new_node = malloc(sizeof(stack_t));
-
-	if (!new_node)
-	{
-		fprintf(stderr, "Error: malloc failed\n");
-		exit(EXIT_FAILURE);
-	}
-
-	new_node->n = value;
-	new_node->prev = NULL;
-	new_node->next = *stack;
-
-	if (*stack)
-		(*stack)->prev = new_node;
-
-	*stack = new_node;
-}
-
-/**
- * pall - Prints all the values on the stack.
+ * process_line - Process each line of the input file
+ * @line: The line to be processed
+ * @line_number: The line number in the file
  * @stack: Double pointer to the stack
  */
-void pall(stack_t **stack)
+void process_line(char *line, int line_number, stack_t **stack)
 {
-	stack_t *temp = *stack;
+    char *opcode;
+    char *arg;
 
-	while (temp)
-	{
-		printf("%d\n", temp->n);
-		temp = temp->next;
-	}
-}
-
-/**
- * pint - Prints the value at the top of the stack.
- * @stack: Double pointer to the stack
- * @line_number: Line number in the Monty file
- */
-void pint(stack_t **stack, int line_number)
-{
-    if (*stack == NULL)
+    opcode = strtok(line, " \n");
+    if (opcode == NULL)
     {
-        fprintf(stderr, "L%d: can't pint, stack empty\n", line_number);
+        return;
+    }
+
+    if (strcmp(opcode, "push") == 0)
+    {
+        arg = strtok(NULL, " \n");
+        if (arg == NULL || !is_numeric(arg))
+        {
+            fprintf(stderr, "L%d: usage: push integer\n", line_number);
+            exit(EXIT_FAILURE);
+        }
+        push(stack, atoi(arg));
+    }
+    else if (strcmp(opcode, "pint") == 0)
+    {
+        pint(stack, line_number);
+    }
+    else if (strcmp(opcode, "pall") == 0)
+    {
+        pall(stack);
+    }
+    else if (strcmp(opcode, "pop") == 0)
+    {
+        pop(stack, line_number);
+    }
+    else if (strcmp(opcode, "swap") == 0)
+    {
+        swap(stack, line_number);
+    }
+    else if (strcmp(opcode, "add") == 0)
+    {
+        add(stack, line_number);
+    }
+    else
+    {
+        fprintf(stderr, "L%d: unknown instruction %s\n", line_number, opcode);
+        exit(EXIT_FAILURE);
+    }
+}
+/**
+ * process_file - Processes the lines of a file.
+ * @filename: The name of the file to process
+ *
+ * This function reads each line of the specified file, processes it, and
+ * performs the corresponding stack operation.
+ */
+void process_file(const char *filename)
+{
+    FILE *file;
+    char line[MAX_LINE_LENGTH];
+    int line_number = 0;
+    stack_t *stack = NULL;
+
+    file = fopen(filename, "r");
+    if (file == NULL)
+    {
+        fprintf(stderr, "Error: Can't open file %s\n", filename);
         exit(EXIT_FAILURE);
     }
 
-    printf("%d\n", (*stack)->n);
-}
-
-
-
-/**
- * pop - Removes the top element of the stack.
- * @stack: Double pointer to the stack
- * @line_number: Line number in the Monty file
- */
-void pop(stack_t **stack, int line_number)
-{
-    stack_t *temp;
-
-    if (*stack == NULL)
+    while (fgets(line, sizeof(line), file) != NULL)
     {
-        fprintf(stderr, "L%d: can't pop an empty stack\n", line_number);
+        line_number++;
+        line[strcspn(line, "\n")] = '\0';
+        process_line(line, line_number, &stack);
+    }
+
+    fclose(file);
+    free_stack(stack);
+}
+/**
+ * is_numeric - Checks if a string is a valid numeric value
+ * @str: The string to check
+ *
+ * Return: 1 if the string is numeric, 0 otherwise
+ */
+int is_numeric(const char *str)
+{
+    if (str == NULL || *str == '\0')
+        return (0);
+
+    while (*str != '\0')
+    {
+        if (!isdigit(*str) && *str != '-')
+            return (0);
+        str++;
+    }
+
+    return (1);
+}
+/**
+ * main - Entry point for the Monty interpreter program
+ * @argc: The number of command-line arguments
+ * @argv: An array containing the command-line arguments
+ *
+ * Return: Always returns 0
+ */
+int main(int argc, char *argv[])
+{
+    if (argc != 2)
+    {
+        fprintf(stderr, "USAGE: monty file\n");
         exit(EXIT_FAILURE);
     }
 
-    temp = *stack;
-    *stack = (*stack)->next;
-    if (*stack != NULL)
-    {
-        (*stack)->prev = NULL;
-    }
+    process_file(argv[1]);
 
-    free(temp);
-}
-
-/**
- * swap - Swaps the top two elements of the stack
- * @stack: Double pointer to the stack
- * @line_number: Line number in the Monty file
- */
-void swap(stack_t **stack, int line_number)
-{
-    stack_t *temp;
-
-    if (*stack == NULL || (*stack)->next == NULL)
-    {
-        fprintf(stderr, "L%d: can't swap, stack too short\n", line_number);
-        exit(EXIT_FAILURE);
-    }
-
-    temp = (*stack)->next;
-    (*stack)->next = temp->next;
-    if (temp->next != NULL)
-        temp->next->prev = *stack;
-    temp->prev = NULL;
-    temp->next = *stack;
-    (*stack)->prev = temp;
-    *stack = temp;
-}
-
-/**
- * add - Adds the top two elements of the stack.
- * @stack: Double pointer to the stack
- * @line_number: Line number in the Monty file
- */
-void add(stack_t **stack, int line_number)
-{
-    stack_t *temp;
-
-    if (*stack == NULL || (*stack)->next == NULL)
-    {
-        fprintf(stderr, "L%d: can't add, stack too short\n", line_number);
-        exit(EXIT_FAILURE);
-    }
-
-    (*stack)->next->n += (*stack)->n;
-    temp = *stack;
-    *stack = (*stack)->next;
-    (*stack)->prev = NULL;
-    free(temp);
+    return (0);
 }
