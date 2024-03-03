@@ -14,49 +14,46 @@
  */
 void process_line(char *line, int line_number, stack_t **stack)
 {
-    char *line_copy;
-    char *opcode;
-    char *arg;
+	char *line_copy;
+	char *opcode;
+	char *arg;
 
-    line_copy = my_strdup(line);
-    if (line_copy == NULL)
-    {
-        fprintf(stderr, "Memory allocation error\n");
-        exit(EXIT_FAILURE);
-    }
-
-    opcode = strtok(line_copy, " ");
-    if (opcode == NULL)
-    {
-        free(line_copy);
-        return;
-    }
-
-    if (strcmp(opcode, "push") == 0)
-    {
-        arg = strtok(NULL, " ");
-        if (arg == NULL || !is_numeric(arg))
-        {
-            fprintf(stderr, "L%d: usage: push integer\n", line_number);
-            free(line_copy);
-            free_stack(*stack);
-            exit(EXIT_FAILURE);
-        }
-        push(stack, atoi(arg));
-    }
-    else if (strcmp(opcode, "pall") == 0)
-    {
-        pall(stack);
-    }
-    else
-    {
-        fprintf(stderr, "L%d: unknown instruction %s\n", line_number, opcode);
-        free(line_copy);
-        free_stack(*stack);
-        exit(EXIT_FAILURE);
-    }
-
-    free(line_copy);
+	line_copy = my_strdup(line);
+	if (line_copy == NULL)
+	{
+		fprintf(stderr, "Memory allocation error\n");
+		exit(EXIT_FAILURE);
+	}
+	opcode = strtok(line_copy, " ");
+	if (opcode == NULL)
+	{
+		free(line_copy);
+		return;
+	}
+	if (strcmp(opcode, "push") == 0)
+	{
+		arg = strtok(NULL, " ");
+		if (arg == NULL || !is_numeric(arg))
+		{
+			fprintf(stderr, "L%d: usage: push integer\n", line_number);
+			free(line_copy);
+			free_stack(*stack);
+			exit(EXIT_FAILURE);
+		}
+		push(stack, atoi(arg));
+	}
+	else if (strcmp(opcode, "pall") == 0)
+	{
+		pall(stack);
+	}
+	else
+	{
+		fprintf(stderr, "L%d: unknown instruction %s\n", line_number, opcode);
+		free(line_copy);
+		free_stack(*stack);
+		exit(EXIT_FAILURE);
+	}
+	free(line_copy);
 }
 
 /**
@@ -68,15 +65,15 @@ void process_line(char *line, int line_number, stack_t **stack)
  */
 int main(int argc, char *argv[])
 {
-    if (argc != 2)
-    {
-        fprintf(stderr, "USAGE: monty file\n");
-        exit(EXIT_FAILURE);
-    }
+	if (argc != 2)
+	{
+		fprintf(stderr, "USAGE: monty file\n");
+		exit(EXIT_FAILURE);
+	}
 
-    process_file(argv[1]);
+	process_file(argv[1]);
 
-    return 0;
+	return (0);
 }
 /**
  * process_file - Processes the lines of a file.
@@ -87,27 +84,27 @@ int main(int argc, char *argv[])
  */
 void process_file(const char *filename)
 {
-    FILE *file;
-    char line[MAX_LINE_LENGTH];
-    int line_number = 0;
-    stack_t *stack = NULL;
+	FILE *file;
+	char line[MAX_LINE_LENGTH];
+	int line_number = 0;
+	stack_t *stack = NULL;
 
-    file = fopen(filename, "r");
-    if (file == NULL)
-    {
-        fprintf(stderr, "Error: Can't open file %s\n", filename);
-        exit(EXIT_FAILURE);
-    }
+	file = fopen(filename, "r");
+	if (file == NULL)
+	{
+		fprintf(stderr, "Error: Can't open file %s\n", filename);
+		exit(EXIT_FAILURE);
+	}
 
-    while (fgets(line, sizeof(line), file) != NULL)
-    {
-        line_number++;
-        line[strcspn(line, "\n")] = '\0';
-        process_line(line, line_number, &stack);
-    }
+	while (fgets(line, sizeof(line), file) != NULL)
+	{
+		line_number++;
+		line[strcspn(line, "\n")] = '\0';
+		process_line(line, line_number, &stack);
+	}
 
-    fclose(file);
-    free_stack(stack);
+	fclose(file);
+	free_stack(stack);
 }
 
 /**
@@ -118,15 +115,15 @@ void process_file(const char *filename)
  */
 int is_numeric(const char *str)
 {
-    if (str == NULL || *str == '\0')
-        return (0);
+	if (str == NULL || *str == '\0')
+		return (0);
 
-    while (*str != '\0')
-    {
-        if (!isdigit(*str) && *str != '-')
-            return 0;
-        str++;
-    }
+	while (*str != '\0')
+	{
+		if (!isdigit(*str) && *str != '-')
+			return (0);
+		str++;
+	}
 
-    return (1);
+	return (1);
 }

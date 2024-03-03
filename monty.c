@@ -1,7 +1,6 @@
 #include "monty.h"
 #include <stdio.h>
 #include <stdlib.h>
-
 /**
  * push - Pushes an element onto the stack.
  * @stack: Double pointer to the stack
@@ -9,22 +8,22 @@
  */
 void push(stack_t **stack, int value)
 {
-    stack_t *new_node = malloc(sizeof(stack_t));
+	stack_t *new_node = malloc(sizeof(stack_t));
 
-    if (!new_node)
-    {
-        fprintf(stderr, "Error: malloc failed\n");
-        exit(EXIT_FAILURE);
-    }
+	if (!new_node)
+	{
+		fprintf(stderr, "Error: malloc failed\n");
+		exit(EXIT_FAILURE);
+	}
 
-    new_node->n = value;
-    new_node->prev = NULL;
-    new_node->next = *stack;
+	new_node->n = value;
+	new_node->prev = NULL;
+	new_node->next = *stack;
 
-    if (*stack)
-        (*stack)->prev = new_node;
+	if (*stack)
+		(*stack)->prev = new_node;
 
-    *stack = new_node;
+	*stack = new_node;
 }
 
 /**
@@ -33,13 +32,13 @@ void push(stack_t **stack, int value)
  */
 void pall(stack_t **stack)
 {
-    stack_t *temp = *stack;
+	stack_t *temp = *stack;
 
-    while (temp)
-    {
-        printf("%d\n", temp->n);
-        temp = temp->next;
-    }
+	while (temp)
+	{
+		printf("%d\n", temp->n);
+		temp = temp->next;
+	}
 }
 
 /**
@@ -49,13 +48,13 @@ void pall(stack_t **stack)
  */
 void pint(stack_t **stack, int line_number)
 {
-    if (*stack == NULL)
-    {
-        fprintf(stderr, "L%d: can't pint, stack empty\n", line_number);
-        exit(EXIT_FAILURE);
-    }
+	if (*stack == NULL)
+	{
+		fprintf(stderr, "L%d: can't pint, stack empty\n", line_number);
+		exit(EXIT_FAILURE);
+	}
 
-    printf("%d\n", (*stack)->n);
+	printf("%d\n", (*stack)->n);
 }
 
 /**
@@ -65,18 +64,18 @@ void pint(stack_t **stack, int line_number)
  */
 void pop(stack_t **stack, int line_number)
 {
-    stack_t *temp;
+	stack_t *temp;
 
-    if (*stack == NULL)
-    {
-        fprintf(stderr, "L%d: can't pop an empty stack\n", line_number);
-        exit(EXIT_FAILURE);
-    }
+	if (*stack == NULL)
+	{
+		fprintf(stderr, "L%d: can't pop an empty stack\n", line_number);
+		exit(EXIT_FAILURE);
+	}
 
-    temp = *stack;
-    *stack = (*stack)->next;
-    if (*stack != NULL)
-        (*stack)->prev = NULL;
+	temp = *stack;
+	*stack = (*stack)->next;
+	if (*stack != NULL)
+		(*stack)->prev = NULL;
 
-    free(temp);
+	free(temp);
 }
