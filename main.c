@@ -14,46 +14,38 @@
  */
 void process_line(char *line, int line_number, stack_t **stack)
 {
-	char *line_copy;
-	char *opcode;
-	char *arg;
+    char *opcode;
+    char *arg;
 
-	line_copy = my_strdup(line);
-	if (line_copy == NULL)
-	{
-		fprintf(stderr, "Memory allocation error\n");
-		exit(EXIT_FAILURE);
-	}
-	opcode = strtok(line_copy, " ");
-	if (opcode == NULL)
-	{
-		free(line_copy);
-		return;
-	}
-	if (strcmp(opcode, "push") == 0)
-	{
-		arg = strtok(NULL, " ");
-		if (arg == NULL || !is_numeric(arg))
-		{
-			fprintf(stderr, "L%d: usage: push integer\n", line_number);
-			free(line_copy);
-			free_stack(*stack);
-			exit(EXIT_FAILURE);
-		}
-		push(stack, atoi(arg));
-	}
-	else if (strcmp(opcode, "pall") == 0)
-	{
-		pall(stack);
-	}
-	else
-	{
-		fprintf(stderr, "L%d: unknown instruction %s\n", line_number, opcode);
-		free(line_copy);
-		free_stack(*stack);
-		exit(EXIT_FAILURE);
-	}
-	free(line_copy);
+    opcode = strtok(line, " \n");
+    if (opcode == NULL)
+    {
+        return;
+    }
+
+    if (strcmp(opcode, "push") == 0)
+    {
+        arg = strtok(NULL, " \n");
+        if (arg == NULL || !is_numeric(arg))
+        {
+            fprintf(stderr, "L%d: usage: push integer\n", line_number);
+            exit(EXIT_FAILURE);
+        }
+        push(stack, atoi(arg));
+    }
+    else if (strcmp(opcode, "pint") == 0)
+    {
+        pint(stack, line_number);
+    }
+    else if (strcmp(opcode, "pall") == 0)
+    {
+        pall(stack);
+    }
+    else
+    {
+        fprintf(stderr, "L%d: unknown instruction %s\n", line_number, opcode);
+        exit(EXIT_FAILURE);
+    }
 }
 
 /**
