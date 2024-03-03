@@ -78,7 +78,13 @@ int main(int argc, char *argv[])
 
     return 0;
 }
-
+/**
+ * process_file - Processes the lines of a file.
+ * @filename: The name of the file to process
+ *
+ * This function reads each line of the specified file, processes it, and
+ * performs the corresponding stack operation.
+ */
 void process_file(const char *filename)
 {
     FILE *file;
@@ -104,7 +110,6 @@ void process_file(const char *filename)
     free_stack(stack);
 }
 
-
 /**
  * is_numeric - Checks if a string is a valid numeric value
  * @str: The string to check
@@ -113,15 +118,15 @@ void process_file(const char *filename)
  */
 int is_numeric(const char *str)
 {
-	if (str == NULL || *str == '\0')
-		return (0);
-	
-	while (*str != '\0')
-	{
-		if (!isdigit(*str))
-			return (0);
-		str++;
-	}
+    if (str == NULL || *str == '\0')
+        return (0);
 
-	return (1);
+    while (*str != '\0')
+    {
+        if (!isdigit(*str) && *str != '-')
+            return 0;
+        str++;
+    }
+
+    return (1);
 }
