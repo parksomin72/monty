@@ -122,6 +122,7 @@ void process_line(char *line, int line_number, stack_t **stack)
  */
 void process_file(const char *filename)
 {
+
     FILE *file;
     char line[MAX_LINE_LENGTH];
     int line_number = 0;
@@ -142,38 +143,8 @@ void process_file(const char *filename)
     }
 
     fclose(file);
-
-    /* Print the stack after all operations have been performed */
-    pall(&stack, line_number);
-
-    /* Free the memory allocated for the stack */
     free_stack(stack);
 }
-
-/*void process_file(const char *filename)
-{
-    FILE *file;
-    char line[MAX_LINE_LENGTH];
-    int line_number = 0;
-    stack_t *stack = NULL;
-
-    file = fopen(filename, "r");
-    if (file == NULL)
-    {
-        fprintf(stderr, "Error: Can't open file %s\n", filename);
-        exit(EXIT_FAILURE);
-    }
-
-    while (fgets(line, sizeof(line), file) != NULL)
-    {
-        line_number++;
-        line[strcspn(line, "\n")] = '\0';
-        process_line(line, line_number, &stack);
-    }
-
-    fclose(file);
-    free_stack(stack);
-}*/
 /**
  * is_numeric - Checks if a string is a valid numeric value
  * @str: The string to check
