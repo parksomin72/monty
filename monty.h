@@ -6,9 +6,9 @@
 
 typedef struct stack_s
 {
-        int n;
-        struct stack_s *prev;
-        struct stack_s *next;
+	int n;
+	struct stack_s *prev;
+	struct stack_s *next;
 } stack_t;
 
 void push(stack_t **stack, int value);
@@ -17,6 +17,8 @@ void pint(stack_t **stack, int line_number);
 void pop(stack_t **stack, int line_number);
 void swap(stack_t **stack, int line_number);
 void add(stack_t **stack, int line_number);
+void nop(stack_t **stack, int line_number);
+void nop(stack_t **stack, int line_number);
 void free_stack(stack_t *stack);
 int is_numeric(const char *str);
 void process_file(const char *filename);
