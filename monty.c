@@ -208,7 +208,8 @@ void add(stack_t **stack, int line_number)
         temp = *stack;
         *stack = (*stack)->next;
         free(temp);
-        (*stack)->prev = NULL;
+        if (*stack != NULL)
+            (*stack)->prev = NULL;
     }
     else if (mode == QUEUE)
     {
@@ -222,18 +223,21 @@ void add(stack_t **stack, int line_number)
             second_last = last;
             last = last->next;
         }
-        /* Add the top element to the last element */
-        last->n += (*stack)->n;
+
         /* Add the top element to the bottom element */
-        last->prev->n += (*stack)->n;
+        last->n += (*stack)->n;
 
         /* Remove the top element */
-        free(*stack);
-
-        /* Update the stack pointer to point to the next element */
-        *stack = last->next;
+        temp = *stack;
+        *stack = (*stack)->next;
+        free(temp);
         if (*stack != NULL)
             (*stack)->prev = NULL;
-        second_last->next = NULL;
+
+        /* If the stack becomes empty, set last to NULL */
+        if (*stack == NULL)
+            last = NULL;
+        else
+            last->prev = second_last;
     }
 }
