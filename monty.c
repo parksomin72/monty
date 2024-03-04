@@ -17,16 +17,23 @@ void process_line(char *line, int line_number, stack_t **stack)
 {
     char *opcode;
     char *arg;
+    char *comment_ptr;
 
-    if (line[0] == '#')
+    while (*line == ' ')
+        line++;
+
+    if (*line == '\0' || *line == '#')
         return;
+
+    comment_ptr = strchr(line, '#');
+    if (comment_ptr != NULL)
+        *comment_ptr = '\0';
 
     opcode = strtok(line, " \n");
-    if (opcode == NULL || strcmp(opcode, "nop") == 0)
-    {
+    if (opcode == NULL)
         return;
-    }
-
+    if (strcmp(opcode, "nop") == 0)
+        return;
     if (strcmp(opcode, "push") == 0)
     {
         arg = strtok(NULL, " \n");
@@ -59,19 +66,19 @@ void process_line(char *line, int line_number, stack_t **stack)
     }
     else if (strcmp(opcode, "sub") == 0)
     {
-    sub(stack, line_number);
+        sub(stack, line_number);
     }
     else if (strcmp(opcode, "div") == 0)
     {
-	    div_op(stack, line_number);
+        div_op(stack, line_number);
     }
     else if (strcmp(opcode, "mul") == 0)
     {
-    mul_op(stack, line_number);
+        mul_op(stack, line_number);
     }
     else if (strcmp(opcode, "mod") == 0)
     {
-    mod_op(stack, line_number);
+        mod_op(stack, line_number);
     }
     else
     {
