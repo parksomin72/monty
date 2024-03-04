@@ -1,142 +1,179 @@
 #include "monty.h"
+#include <stdio.h>
 #include <stdlib.h>
-
+#include <string.h>
 /**
- * free_stack - Frees a stack.
- * @stack: Pointer to the top of the stack
- *
- * This function frees all the nodes in the stack.
- */
-void free_stack(stack_t *stack)
-{
-	stack_t *temp;
-
-	while (stack != NULL)
-	{
-		temp = stack;
-		stack = stack->next;
-		free(temp);
-	}
-}
-/**
- * push - Pushes an element onto the stack.
- * @stack: Double pointer to the stack
- * @value: Value to be pushed onto the stack
- */
-void push(stack_t **stack, int value)
-{
-        stack_t *new_node = malloc(sizeof(stack_t));
-
-        if (!new_node)
-        {
-                fprintf(stderr, "Error: malloc failed\n");
-                exit(EXIT_FAILURE);
-        }
-
-        new_node->n = value;
-        new_node->prev = NULL;
-        new_node->next = *stack;
-
-        if (*stack)
-                (*stack)->prev = new_node;
-
-        *stack = new_node;
-}
-/**
- * pall - Prints all the values on the stack.
- * @stack: Double pointer to the stack
- */
-void pall(stack_t **stack)
-{
-        stack_t *temp = *stack;
-
-        while (temp)
-        {
-                printf("%d\n", temp->n);
-                temp = temp->next;
-        }
-}
-/**
- * pint - Prints the value at the top of the stack.
+ * nop - Doesn't do anything.
  * @stack: Double pointer to the stack
  * @line_number: Line number in the Monty file
  */
-void pint(stack_t **stack, int line_number)
+void nop(stack_t **stack, int line_number)
 {
-    if (*stack == NULL)
-    {
-        fprintf(stderr, "L%d: can't pint, stack empty\n", line_number);
-        exit(EXIT_FAILURE);
-    }
-
-    printf("%d\n", (*stack)->n);
+    (void) stack;
+    (void) line_number;
 }
+
 /**
- * pop - Removes the top element of the stack.
+ * sub - Subtracts the top element of the stack from the second top element.
  * @stack: Double pointer to the stack
  * @line_number: Line number in the Monty file
  */
-void pop(stack_t **stack, int line_number)
-{
-    stack_t *temp;
-
-    if (*stack == NULL)
-    {
-        fprintf(stderr, "L%d: can't pop an empty stack\n", line_number);
-        exit(EXIT_FAILURE);
-    }
-
-    temp = *stack;
-    *stack = (*stack)->next;
-    if (*stack != NULL)
-    {
-        (*stack)->prev = NULL;
-    }
-
-    free(temp);
-}
-/**
- * swap - Swaps the top two elements of the stack
- * @stack: Double pointer to the stack
- * @line_number: Line number in the Monty file
- */
-void swap(stack_t **stack, int line_number)
+void sub(stack_t **stack, int line_number)
 {
     stack_t *temp;
 
     if (*stack == NULL || (*stack)->next == NULL)
     {
-        fprintf(stderr, "L%d: can't swap, stack too short\n", line_number);
+        fprintf(stderr, "L%d: can't sub, stack too short\n", line_number);
         exit(EXIT_FAILURE);
     }
 
-    temp = (*stack)->next;
-    (*stack)->next = temp->next;
-    if (temp->next != NULL)
-        temp->next->prev = *stack;
-    temp->prev = NULL;
-    temp->next = *stack;
-    (*stack)->prev = temp;
-    *stack = temp;
-}
-/**
- * add - Adds the top two elements of the stack.
- * @stack: Double pointer to the stack
- * @line_number: Line number in the Monty file
- */
-void add(stack_t **stack, int line_number)
-{
-    stack_t *temp;
-
-    if (*stack == NULL || (*stack)->next == NULL)
-    {
-        fprintf(stderr, "L%d: can't add, stack too short\n", line_number);
-        exit(EXIT_FAILURE);
-    }
-
-    (*stack)->next->n += (*stack)->n;
+    (*stack)->next->n -= (*stack)->n;
     temp = *stack;
     *stack = (*stack)->next;
     (*stack)->prev = NULL;
     free(temp);
+}
+
+/**
+ * div_op - Divides the second top element of the stack by the top element.
+ * @stack: Double pointer to the stack
+ * @line_number: Line number in the Monty file
+ */
+void div_op(stack_t **stack, unsigned int line_number)
+{
+    stack_t *temp;
+
+    if (*stack == NULL || (*stack)->next == NULL)
+    {
+        fprintf(stderr, "L%d: can't div, stack too short\n", line_number);
+        exit(EXIT_FAILURE);
+    }
+
+    if ((*stack)->n == 0)
+    {
+        fprintf(stderr, "L%d: division by zero\n", line_number);
+        exit(EXIT_FAILURE);
+    }
+
+    (*stack)->next->n /= (*stack)->n;
+    temp = *stack;
+    *stack = (*stack)->next;
+    free(temp);
+}
+
+/**
+ * mul_op - Multiplies the second top element of the stack with the top element.
+ * @stack: Double pointer to the stack
+ * @line_number: Line number in the Monty file
+ */
+void mul_op(stack_t **stack, unsigned int line_number)
+{
+    stack_t *temp;
+
+    if (*stack == NULL || (*stack)->next == NULL)
+    {
+        fprintf(stderr, "L%d: can't mul, stack too short\n", line_number);
+        exit(EXIT_FAILURE);
+    }
+
+    (*stack)->next->n *= (*stack)->n;
+    temp = *stack;
+    *stack = (*stack)->next;
+    free(temp);
+}
+
+/**
+ * mod_op - Computes the rest of the division of the second top element
+ *           of the stack by the top element of the stack.
+ * @stack: Double pointer to the stack
+ * @line_number: Line number in the Monty file
+ */
+void mod_op(stack_t **stack, unsigned int line_number)
+{
+    stack_t *temp;
+    int divisor;
+
+    if (*stack == NULL || (*stack)->next == NULL)
+    {
+        fprintf(stderr, "L%d: can't mod, stack too short\n", line_number);
+        exit(EXIT_FAILURE);
+    }
+
+    divisor = (*stack)->n;
+    if (divisor == 0)
+    {
+        fprintf(stderr, "L%d: division by zero\n", line_number);
+        exit(EXIT_FAILURE);
+    }
+
+    (*stack)->next->n %= divisor;
+    temp = *stack;
+    *stack = (*stack)->next;
+    free(temp);
+}
+
+/**
+ * pchar - Prints the character at the top of the stack
+ * @stack: Double pointer to the stack
+ * @line_number: Line number in the Monty file
+ */
+void pchar(stack_t **stack, int line_number)
+{
+    if (*stack == NULL)
+    {
+        fprintf(stderr, "L%d: can't pchar, stack empty\n", line_number);
+        exit(EXIT_FAILURE);
+    }
+
+    if ((*stack)->n < 0 || (*stack)->n > 127)
+    {
+        fprintf(stderr, "L%d: can't pchar, value out of range\n", line_number);
+        exit(EXIT_FAILURE);
+    }
+
+    printf("%c\n", (*stack)->n);
+}
+
+/**
+ * pstr - Prints the string starting at the top of the stack.
+ * @stack: Double pointer to the stack
+ * @line_number: Line number in the Monty file (unused parameter)
+ */
+void pstr(stack_t **stack, int line_number)
+{
+    stack_t *temp = *stack;
+
+    (void)line_number;
+
+    while (temp != NULL && temp->n != 0 && (temp->n >= 0 && temp->n <= 127))
+    {
+        putchar(temp->n);
+        temp = temp->next;
+    }
+    putchar('\n');
+}
+
+/**
+ * rotl - Rotates the stack to the top.
+ * @stack: Double pointer to the stack
+ * @line_number: Line number in the Monty file (unused parameter)
+ */
+void rotl(stack_t **stack, int line_number)
+{
+	stack_t *temp;
+	(void)line_number;
+
+    if (*stack == NULL || (*stack)->next == NULL)
+        return;
+
+    temp = *stack;
+    while (temp->next != NULL)
+        temp = temp->next;
+
+    temp->next = *stack;
+    (*stack)->prev = temp;
+    *stack = (*stack)->next;
+    (*stack)->prev->next = NULL;
+    (*stack)->prev = NULL;
 }
