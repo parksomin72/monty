@@ -21,6 +21,7 @@ void nop(stack_t **stack, int line_number);
 void nop(stack_t **stack, int line_number);
 void sub(stack_t **stack, int line_number);
 void div_op(stack_t **stack, unsigned int line_number);
+void mul_op(stack_t **stack, unsigned int line_number);
 void free_stack(stack_t *stack);
 int is_numeric(const char *str);
 void process_file(const char *filename);
