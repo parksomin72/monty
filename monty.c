@@ -42,6 +42,7 @@ void process_line(char *line, int line_number, stack_t **stack)
             fprintf(stderr, "L%d: usage: push integer\n", line_number);
             exit(EXIT_FAILURE);
         }
+	        global.value = arg;
         push(stack, atoi(arg));
     }
     else if (strcmp(opcode, "pint") == 0)
@@ -177,8 +178,6 @@ int main(int argc, char *argv[])
         fprintf(stderr, "USAGE: monty file\n");
         exit(EXIT_FAILURE);
     }
-
-    global.value;
 
     process_file(argv[1]);
 
