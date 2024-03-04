@@ -18,6 +18,9 @@ void process_line(char *line, int line_number, stack_t **stack)
     char *opcode;
     char *arg;
 
+    if (line[0] == '#')
+        return;
+
     opcode = strtok(line, " \n");
     if (opcode == NULL || strcmp(opcode, "nop") == 0)
     {
