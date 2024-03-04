@@ -66,6 +66,10 @@ void process_line(char *line, int line_number, stack_t **stack)
     {
     mul_op(stack, line_number);
     }
+    else if (strcmp(opcode, "mod") == 0)
+    {
+    mod_op(stack, line_number);
+    }
     else
     {
         fprintf(stderr, "L%d: unknown instruction %s\n", line_number, opcode);

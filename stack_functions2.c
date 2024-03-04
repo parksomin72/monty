@@ -82,3 +82,33 @@ void mul_op(stack_t **stack, unsigned int line_number)
     *stack = (*stack)->next;
     free(temp);
 }
+
+/**
+ * mod_op - Computes the rest of the division of the second top element
+ *           of the stack by the top element of the stack.
+ * @stack: Double pointer to the stack
+ * @line_number: Line number in the Monty file
+ */
+void mod_op(stack_t **stack, unsigned int line_number)
+{
+    stack_t *temp;
+    int divisor;
+
+    if (*stack == NULL || (*stack)->next == NULL)
+    {
+        fprintf(stderr, "L%d: can't mod, stack too short\n", line_number);
+        exit(EXIT_FAILURE);
+    }
+
+    divisor = (*stack)->n;
+    if (divisor == 0)
+    {
+        fprintf(stderr, "L%d: division by zero\n", line_number);
+        exit(EXIT_FAILURE);
+    }
+
+    (*stack)->next->n %= divisor;
+    temp = *stack;
+    *stack = (*stack)->next;
+    free(temp);
+}
