@@ -142,8 +142,38 @@ void process_file(const char *filename)
     }
 
     fclose(file);
+
+    /* Print the stack after all operations have been performed */
+    pall(&stack, line_number);
+
+    /* Free the memory allocated for the stack */
     free_stack(stack);
 }
+
+/*void process_file(const char *filename)
+{
+    FILE *file;
+    char line[MAX_LINE_LENGTH];
+    int line_number = 0;
+    stack_t *stack = NULL;
+
+    file = fopen(filename, "r");
+    if (file == NULL)
+    {
+        fprintf(stderr, "Error: Can't open file %s\n", filename);
+        exit(EXIT_FAILURE);
+    }
+
+    while (fgets(line, sizeof(line), file) != NULL)
+    {
+        line_number++;
+        line[strcspn(line, "\n")] = '\0';
+        process_line(line, line_number, &stack);
+    }
+
+    fclose(file);
+    free_stack(stack);
+}*/
 /**
  * is_numeric - Checks if a string is a valid numeric value
  * @str: The string to check
@@ -200,47 +230,11 @@ void add(stack_t **stack, int line_number)
         exit(EXIT_FAILURE);
     }
 
-    /* Perform operations based on the current mode */
-    if (mode == STACK)
-    {
-        /* Add elements in stack mode */
-        (*stack)->next->n += (*stack)->n;
-        temp = *stack;
-        *stack = (*stack)->next;
-        free(temp);
-        if (*stack != NULL)
-            (*stack)->prev = NULL;
-    }
-    else if (mode == QUEUE)
-    {
-        /* Add elements in queue mode */
-        stack_t *last = *stack;
-        stack_t *second_last = NULL;
-
-        /* Traverse to the last and second last elements */
-        while (last->next != NULL)
-        {
-            second_last = last;
-            last = last->next;
-        }
-
-        /* Add the top element to the bottom element */
-        last->n += (*stack)->n;
-
-        /* Remove the top element */
-        temp = *stack;
-        *stack = (*stack)->next;
-        free(temp);
-        if (*stack != NULL)
-            (*stack)->prev = NULL;
-
-        /* If the stack becomes empty, set last to NULL */
-        if (*stack == NULL)
-            last = NULL;
-        else
-            last->prev = second_last;
-
-        /* Print the stack only once after the add operation */
-        pall(stack, line_number);
-    }
+    /* Perform addition */
+    (*stack)->next->n += (*stack)->n;
+    temp = *stack;
+    *stack = (*stack)->next;
+    free(temp);
+    if (*stack != NULL)
+        (*stack)->prev = NULL;
 }
