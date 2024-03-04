@@ -154,5 +154,6 @@ void pstr(stack_t **stack, int line_number)
         putchar(temp->n);
         temp = temp->next;
     }
+     putchar('\n');
 
 }
