@@ -178,7 +178,7 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
 
-    global.value = "10";
+    global.value;
 
     process_file(argv[1]);
 
