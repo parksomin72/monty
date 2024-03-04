@@ -22,7 +22,7 @@ void free_stack(stack_t *stack)
  * push - Pushes an element onto the stack.
  * @stack: Double pointer to the stack
  * @value: Value to be pushed onto the stack
- */
+ *
 void push(stack_t **stack, int value)
 {
         stack_t *new_node = malloc(sizeof(stack_t));
@@ -42,10 +42,10 @@ void push(stack_t **stack, int value)
 
         *stack = new_node;
 }
-/**
+**
  * pall - Prints all the values on the stack.
  * @stack: Double pointer to the stack
- */
+ *
 void pall(stack_t **stack)
 {
         stack_t *temp = *stack;
@@ -55,7 +55,7 @@ void pall(stack_t **stack)
                 printf("%d\n", temp->n);
                 temp = temp->next;
         }
-}
+}*/
 /**
  * pint - Prints the value at the top of the stack.
  * @stack: Double pointer to the stack

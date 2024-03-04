@@ -5,7 +5,7 @@
 #include <ctype.h>
 
 #define MAX_LINE_LENGTH 1024
-
+MontyData global;
 
 /**
  * process_line - Process each line of the input file
@@ -13,7 +13,6 @@
  * @line_number: The line number in the file
  * @stack: Double pointer to the stack
  */
-int mode = STACK;
 void process_line(char *line, int line_number, stack_t **stack)
 {
     char *opcode;
@@ -51,7 +50,7 @@ void process_line(char *line, int line_number, stack_t **stack)
     }
     else if (strcmp(opcode, "pall") == 0)
     {
-        pall(stack);
+        pall(stack, line_number);
     }
     else if (strcmp(opcode, "pop") == 0)
     {
@@ -178,6 +177,8 @@ int main(int argc, char *argv[])
         fprintf(stderr, "USAGE: monty file\n");
         exit(EXIT_FAILURE);
     }
+
+    global.value = "10";
 
     process_file(argv[1]);
 
