@@ -144,8 +144,6 @@ void pstr(stack_t **stack, int line_number)
 {
     stack_t *temp = *stack;
 
-    (void)line_number;
-
     while (temp != NULL && temp->n != 0)
     {
         if (temp->n < 0 || temp->n > 127)
@@ -156,5 +154,5 @@ void pstr(stack_t **stack, int line_number)
         putchar(temp->n);
         temp = temp->next;
     }
-    putchar('\n');
+
 }
