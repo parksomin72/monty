@@ -223,15 +223,16 @@ void add(stack_t **stack, int line_number)
             last = last->next;
         }
 
-        /* Add the top two elements */
-        last->n += (*stack)->n;
+        /* Add the top element to the bottom element */
+        last->prev->n += (*stack)->n;
 
-        /* Remove the previous top element */
+        /* Remove the top element */
         free(*stack);
 
-        /* Update the stack pointer to point to the second element */
-        *stack = last;
-        last->prev = NULL;
+        /* Update the stack pointer to point to the next element */
+        *stack = last->next;
+        if (*stack != NULL)
+            (*stack)->prev = NULL;
         second_last->next = NULL;
     }
 }
