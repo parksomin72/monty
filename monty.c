@@ -239,5 +239,8 @@ void add(stack_t **stack, int line_number)
             last = NULL;
         else
             last->prev = second_last;
+
+        /* Print the stack only once after the add operation */
+        pall(stack, line_number);
     }
 }
