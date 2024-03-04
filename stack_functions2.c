@@ -25,3 +25,27 @@ void rotr(stack_t **stack, int line_number)
     temp->prev->next = NULL;
     temp->prev = NULL;
 }
+
+/**
+ * stack - Sets the format of the data to a stack (LIFO)
+ * @stack: Double pointer to the stack
+ * @line_number: Line number in the Monty file
+ */
+void stack(stack_t **stack, int line_number)
+{
+    (void)stack;
+    (void)line_number;
+    mode = STACK;
+}
+
+/**
+ * queue - Sets the format of the data to a queue (FIFO)
+ * @stack: Double pointer to the stack
+ * @line_number: Line number in the Monty file
+ */
+void queue(stack_t **stack, int line_number)
+{
+    (void)stack;
+    (void)line_number;
+    mode = QUEUE;
+}
