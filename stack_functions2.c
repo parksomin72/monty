@@ -134,3 +134,27 @@ void pchar(stack_t **stack, int line_number)
 
     printf("%c\n", (*stack)->n);
 }
+
+/**
+ * pstr - Prints the string starting at the top of the stack.
+ * @stack: Double pointer to the stack
+ * @line_number: Line number in the Monty file
+ */
+void pstr(stack_t **stack, int line_number)
+{
+    stack_t *temp = *stack;
+
+    (void)line_number;
+
+    while (temp != NULL && temp->n != 0)
+    {
+        if (temp->n < 0 || temp->n > 127)
+        {
+            fprintf(stderr, "L%d: can't pstr, value out of range\n", line_number);
+            exit(EXIT_FAILURE);
+        }
+        putchar(temp->n);
+        temp = temp->next;
+    }
+    putchar('\n');
+}
