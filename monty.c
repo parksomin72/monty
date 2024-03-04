@@ -5,6 +5,8 @@
 #include <ctype.h>
 
 #define MAX_LINE_LENGTH 1024
+
+
 /**
  * process_line - Process each line of the input file
  * @line: The line to be processed
@@ -17,7 +19,7 @@ void process_line(char *line, int line_number, stack_t **stack)
     char *arg;
 
     opcode = strtok(line, " \n");
-    if (opcode == NULL)
+    if (opcode == NULL || strcmp(opcode, "nop") == 0)
     {
         return;
     }
@@ -58,6 +60,7 @@ void process_line(char *line, int line_number, stack_t **stack)
         exit(EXIT_FAILURE);
     }
 }
+
 /**
  * process_file - Processes the lines of a file.
  * @filename: The name of the file to process
