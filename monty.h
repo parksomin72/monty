@@ -10,7 +10,7 @@ typedef struct stack_s
 	struct stack_s *prev;
 	struct stack_s *next;
 } stack_t;
-
+/* Functions prototypes */
 void push(stack_t **stack, int value);
 void pall(stack_t **stack);
 void pint(stack_t **stack, int line_number);
