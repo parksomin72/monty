@@ -4,6 +4,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define STACK 0
+#define QUEUE 1
+/* Define a global variable to store the mode */
+extern int mode;
+
 typedef struct stack_s
 {
 	int n;

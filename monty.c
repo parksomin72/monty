@@ -13,6 +13,7 @@
  * @line_number: The line number in the file
  * @stack: Double pointer to the stack
  */
+int mode = STACK;
 void process_line(char *line, int line_number, stack_t **stack)
 {
     char *opcode;
@@ -96,6 +97,14 @@ void process_line(char *line, int line_number, stack_t **stack)
     {
         rotr(stack, line_number);
     }
+    else if (strcmp(opcode, "stack") == 0)
+    {
+        mode = STACK;
+    }
+    else if (strcmp(opcode, "queue") == 0)
+    {
+        mode = QUEUE;
+    }
     else
     {
         fprintf(stderr, "L%d: unknown instruction %s\n", line_number, opcode);
@@ -173,4 +182,56 @@ int main(int argc, char *argv[])
     process_file(argv[1]);
 
     return (0);
+}
+
+/**
+ * add - Adds the top two elements of the stack.
+ * @stack: Double pointer to the stack
+ * @line_number: Line number in the Monty file
+ */
+void add(stack_t **stack, int line_number)
+{
+    stack_t *temp;
+
+    /* Check if there are at least two elements in the stack */
+    if (*stack == NULL || (*stack)->next == NULL)
+    {
+        fprintf(stderr, "L%d: can't add, stack too short\n", line_number);
+        exit(EXIT_FAILURE);
+    }
+
+    /* Perform operations based on the current mode */
+    if (mode == STACK)
+    {
+        /* Add elements in stack mode */
+        (*stack)->next->n += (*stack)->n;
+        temp = *stack;
+        *stack = (*stack)->next;
+        free(temp);
+        (*stack)->prev = NULL;
+    }
+    else if (mode == QUEUE)
+    {
+        /* Add elements in queue mode */
+        stack_t *last = *stack;
+        stack_t *second_last = NULL;
+
+        /* Traverse to the last and second last elements */
+        while (last->next != NULL)
+        {
+            second_last = last;
+            last = last->next;
+        }
+
+        /* Add the top two elements */
+        last->n += (*stack)->n;
+
+        /* Remove the previous top element */
+        free(*stack);
+
+        /* Update the stack pointer to point to the second element */
+        *stack = last;
+        last->prev = NULL;
+        second_last->next = NULL;
+    }
 }
