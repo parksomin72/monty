@@ -86,7 +86,7 @@ void process_line(char *line, int line_number, stack_t **stack)
     }
     else if (strcmp(opcode, "pstr") == 0)
     {
-        pstr(stack);
+        pstr(stack, line_number);
     }
     else
     {
@@ -94,6 +94,7 @@ void process_line(char *line, int line_number, stack_t **stack)
         exit(EXIT_FAILURE);
     }
 }
+
 
 /**
  * process_file - Processes the lines of a file.

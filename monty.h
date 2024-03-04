@@ -24,7 +24,7 @@ void div_op(stack_t **stack, unsigned int line_number);
 void mul_op(stack_t **stack, unsigned int line_number);
 void mod_op(stack_t **stack, unsigned int line_number);
 void pchar(stack_t **stack, int line_number);
-void pstr(stack_t **stack);
+void pstr(stack_t **stack, int line_number);
 void free_stack(stack_t *stack);
 int is_numeric(const char *str);
 void process_file(const char *filename);
