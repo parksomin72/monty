@@ -223,8 +223,13 @@ void add(stack_t **stack, int line_number)
             last = last->next;
         }
 
+<<<<<<< HEAD
         /* Add the top element to the last element */
         last->n += (*stack)->n;
+=======
+        /* Add the top element to the bottom element */
+        last->prev->n += (*stack)->n;
+>>>>>>> d45a73886b54fdec0e302b951e64e8089eba5a55
 
         /* Remove the top element */
         free(*stack);
