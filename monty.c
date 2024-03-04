@@ -60,7 +60,7 @@ void process_line(char *line, int line_number, stack_t **stack)
     }
     else if (strcmp(opcode, "div") == 0)
     {
-    div_op(stack, line_number);
+	    div_op(stack, line_number);
     }
     else
     {
