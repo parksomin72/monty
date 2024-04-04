@@ -5,6 +5,9 @@
 # Block 1 will hold the value to multiply
 # Block 2 will hold the amount of times to multiply
 
+# Initialize block 0 with value 0
+[>++++++++++<-] # Set block 0 to 0
+
 # Read input into block 1 and 2
 >,------------------------------------------------ # Read into block #1
 >,------------------------------------------------ # Read into block #2
