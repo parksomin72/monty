@@ -15,10 +15,16 @@
 
     # Move block 2 to block 3 and decrease
     <[-] # Done with one iteration
+
+    # Debug: Print ASCII value of block 0 (result)
+    .
+
+    # Debug: Print ASCII value of block 1 (value to multiply)
+    .
+
+    # Debug: Print ASCII value of block 2 (amount of times to multiply)
+    .
 ]
 
 # Move to block 0 and increase by ASCII '0' (DEC 48)
 <<++++++++++++++++++++++++++++++++++++++++++++++++.
-
-# Print the result
-.
